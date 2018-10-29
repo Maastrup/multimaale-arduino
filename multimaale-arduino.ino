@@ -15,12 +15,16 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int ting = analogRead(A0);
+  int mesurement = analogRead(A0);
 //  if (ting < smallest) {
 //    smallest = ting;
 //    Serial.println(smallest);
 //  }
-  long temp = map(ting, smallest, biggest, 0, 100);
+  long temp = map(mesurement, smallest, biggest, 0, 100);
   // float finalTemp = temp / 100.0f;
   Serial.println(temp);
 }
+
+
+
+
