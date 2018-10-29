@@ -35,7 +35,7 @@ void setup() {
 
   //setup inputs
   pinMode(tempSensor, INPUT);
-  attachInterrupt(digitalPinToInterrupt(2), ButtonPressed, RISING)
+  attachInterrupt(digitalPinToInterrupt(2), ButtonPressed, FALLING);
 }
 
 void loop() {
