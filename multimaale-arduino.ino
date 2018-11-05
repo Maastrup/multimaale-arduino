@@ -15,12 +15,12 @@ const int tempMaxValue = 100;
 const int tempMinValue = 0;
 
 //current sensor Pin
-int readPin = tempSensor;
+int readPin;
 //"current" configuration
-int big = tempBig;
-int small = tempSmall;
-int maxValue = tempMaxValue;
-int minValue = tempMinValue;
+int big;
+int small;
+int maxValue;
+int minValue;
 
 int menuIndex = 0;
 String menu[] = {"Temp", "Strain"};
@@ -43,6 +43,7 @@ void setup() {
 
 void loop() {
   if(buttonPressed){
+    buttonPressed = false;
     switch(menuIndex){
       case 0: // temperature sensor
         readPin = tempSensor; // A0
