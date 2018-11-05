@@ -15,15 +15,15 @@ const int tempMaxValue = 100;
 const int tempMinValue = 0;
 
 //current sensor Pin
-int readPin;
+int readPin = tempSensor;
 //"current" configuration
-int big;
-int small;
-int maxValue;
-int minValue;
+int big = tempBig;
+int small = tempSmall;
+int maxValue = tempMaxValue;
+int minValue = tempMinValue;
 
 int menuIndex = 0;
-String menu[] = {"Temp", "Strain"};
+String menu[] = {"Temp", "Strain", "LDR"};
 
 volatile bool buttonPressed = false;
 
@@ -38,12 +38,17 @@ void setup() {
 
   //setup inputs
   pinMode(tempSensor, INPUT);
-  attachInterrupt(digitalPinToInterrupt(2), buttonPressed, FALLING);
+  pinMode(2, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(2), ButtonPressed, FALLING);
+
+  lcd.setCursor(0,0);
+  lcd.print(menu[menuIndex]);
 }
 
 void loop() {
   if(buttonPressed){
     buttonPressed = false;
+    Index();
     switch(menuIndex){
       case 0: // temperature sensor
         readPin = tempSensor; // A0
@@ -63,6 +68,9 @@ void loop() {
         minValue = 0;
         /* * * * * * */
     }
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print(menu[menuIndex]);
   }
 
   long mesurement = analogRead(readPin);
@@ -72,14 +80,25 @@ void loop() {
 //  }
   long sensorValue = map(mesurement, small, big, minValue, maxValue);
   // float finalTemp = temp / 100.0f;
-  Serial.println(sensorValue);
 
+  lcd.setCursor(0,1);
+  lcd.print("        ");
+  lcd.setCursor(0,1);
+  lcd.print(sensorValue);
+//  Serial.println(sensorValue);
+//  Serial.println(menuIndex);
 }
 
 void ButtonPressed(){
   unsigned int currTime = millis();
   if (currTime - lastTime > 200) {
-    if (0 <= menuIndex && menuIndex < 2){
+    buttonPressed = true;
+    lastTime = currTime;
+  }
+}
+
+void Index(){
+  if (0 <= menuIndex && menuIndex < 2){
       menuIndex++;
     } else if (menuIndex == 2){
       menuIndex = 0;
@@ -90,19 +109,8 @@ void ButtonPressed(){
       lcd.print("serial output.");
       Serial.println("Error: menuIndex increment failed in ButtonPressed()");
     }
-    buttonPressed = true;
-    lcd.print(menu[])
-    lastTime = currTime;
-  }
 }
 
-void UpdateScreen(int sensorValue, String currentMenu){
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print(currentMenu);
-  lcd.setCursor(0,1);
-  lcd.print(sensorValue);
-}
 
 
 
